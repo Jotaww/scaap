@@ -1,0 +1,95 @@
+@media screen and (min-width: 100px ) and (max-width: 768px) {
+  
+  .painel {
+    width: 90%;
+  }
+
+  .painel > a {
+    width: 100%;
+  }
+
+  .painel > a > div {
+    width: 100%;
+  }
+
+}
+
+@media screen and (min-width: 577px ) and (max-width: 768px) {
+  #scaapLogo {
+    width: 250px;
+  }
+
+  .d-flex {
+    display: flex;
+  }
+
+  .d-flex div {
+    width: 100%;
+  }
+
+}
+
+@media screen and (min-width: 769px ) and (max-width: 1200px) {
+  #scaapLogo {
+    width: 300px;
+  }
+
+  .tipoCadastro {
+    flex-direction: row;
+  }
+
+  #tabelaSegmentos {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+  
+  #tabelaCultural {
+    width: 40%;
+  }
+  
+  #tabelaEsportiva {
+    width: 40%;
+  }
+
+}
+
+@media screen and (min-width: 1201px){
+  #scaapLogo {
+    width: 300px;
+  }
+
+  .tipoCadastro {
+    display: flex;
+    flex-direction: row;
+  }
+
+  #tabelaSegmentos {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+
+  #tabelaCultural {
+    width: 35%;
+  }
+  
+  #tabelaEsportiva {
+    width: 35%;
+  }
+
+  .d-flex {
+    display: flex;
+    flex-direction: row;
+  }
+
+  #table {
+    width: 90%;
+    margin: auto;
+  }
+
+  .painel > a > div {
+    width: 250px;
+  }
+
+}

@@ -1,0 +1,42 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: rgb(242, 239, 239);
+}
+
+.container {
+  background-color: white;
+  width: 95%;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.199);
+  border-radius: 0px 0px 10px 10px ;
+  padding-bottom: 30px;
+  margin-bottom: 30px;
+}
+
+.seach h1 {
+  display: flex;
+  justify-content: center;
+}
+
+#scaapLogo {
+  width: 50%;
+}
+
+#navbarSupportedContent {
+  justify-content: flex-end;
+}
+
+.nav-link {
+  color: white;
+}
+
+.nav-link:hover {
+  color: rgb(206, 206, 206);
+}
+
+#divSegEsportivo {
+  display: none;
+}
