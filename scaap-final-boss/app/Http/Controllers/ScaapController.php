@@ -11,127 +11,43 @@ use Illuminate\Http\Request;
 
 class ScaapController extends Controller {
     
-    public function viewHomePage() {
-
-        $search = request('search');
-        $tipoSegmento = request('tipoSegmento');
-        $segmentoCultural = request('segmentoCultural');
-        $segmentoEsportivo = request('segmentoEsportivo');
-
-        if($search && $tipoSegmento && $segmentoEsportivo) {
-
-            $segmentos = FormSegmento::where('tipo', $tipoSegmento)
-            ->Where('id_segmento', $segmentoEsportivo)->get();
-
-            $array = array();
-
-            foreach($segmentos as $segmento) {
-                array_push($array, $segmento->id_user);
-            }
-
-            $users = Form::where('nomeCompleto', 'like', '%'.$search.'%')->where('aguardando', '0')
-            ->orWhere('cidade', 'like', '%'.$search.'%')->where('aguardando', '0')
-            ->whereIn('id_user', $array)
-            ->paginate(10);
-
-        }
-        else if($search && $tipoSegmento && $segmentoCultural) {
-
-            $segmentos = FormSegmento::where('tipo', $tipoSegmento)
-            ->Where('id_segmento', $segmentoCultural)->get();
-
-            $array = array();
-
-            foreach($segmentos as $segmento) {
-                array_push($array, $segmento->id_user);
-            }
-
-            $users = Form::where('nomeCompleto', 'like', '%'.$search.'%')->where('aguardando', '0')
-            ->orWhere('cidade', 'like', '%'.$search.'%')->where('aguardando', '0')
-            ->whereIn('id_user', $array)
-            ->paginate(10);
-
-        }
-        else if($tipoSegmento && $segmentoEsportivo) {
-
-            $segmentos = FormSegmento::where('tipo', $tipoSegmento)
-            ->Where('id_segmento', $segmentoEsportivo)->get();
-
-            $array = array();
-
-            foreach($segmentos as $segmento) {
-                array_push($array, $segmento->id_user);
-            }
-
-            $users = Form::where('aguardando', '0')->whereIn('id_user', $array)->paginate(10);
-
-        }
-        else if($tipoSegmento && $segmentoCultural) {
-
-            $segmentos = FormSegmento::where('tipo', $tipoSegmento)
-            ->Where('id_segmento', $segmentoCultural)->get();
-
-            $array = array();
-
-            foreach($segmentos as $segmento) {
-                array_push($array, $segmento->id_user);
-            }
-            
-            $users = Form::where('aguardando', '0')->whereIn('id_user', $array)->paginate(10);
-
-        }
-        else if($search && $tipoSegmento) {
-
-            $users = Form::where('nomeCompleto', 'like', '%'.$search.'%')
-            ->Where('produtorCultural', $tipoSegmento)->where('aguardando', '0')
-            ->orWhere('nomeCompleto', 'like', '%'.$search.'%')
-            ->Where('produtorEsportivo', $tipoSegmento)->where('aguardando', '0')
-            ->orWhere('nomeCompleto', 'like', '%'.$search.'%')
-            ->Where('artista', $tipoSegmento)->where('aguardando', '0')
-            ->orWhere('nomeCompleto', 'like', '%'.$search.'%')
-            ->Where('atleta', $tipoSegmento)->where('aguardando', '0')
-            ->orWhere('cidade', 'like', '%'.$search.'%')
-            ->Where('produtorCultural', $tipoSegmento)->where('aguardando', '0')
-            ->orWhere('cidade', 'like', '%'.$search.'%')
-            ->Where('produtorEsportivo', $tipoSegmento)->where('aguardando', '0')
-            ->orWhere('cidade', 'like', '%'.$search.'%')
-            ->Where('artista', $tipoSegmento)->where('aguardando', '0')
-            ->orWhere('cidade', 'like', '%'.$search.'%')
-            ->Where('atleta', $tipoSegmento)->where('aguardando', '0')
-            ->orWhere('bairro', 'like', '%'.$search.'%')
-            ->Where('produtorCultural', $tipoSegmento)->where('aguardando', '0')
-            ->orWhere('bairro', 'like', '%'.$search.'%')
-            ->Where('produtorEsportivo', $tipoSegmento)->where('aguardando', '0')
-            ->orWhere('bairro', 'like', '%'.$search.'%')
-            ->Where('artista', $tipoSegmento)->where('aguardando', '0')
-            ->orWhere('bairro', 'like', '%'.$search.'%')
-            ->Where('atleta', $tipoSegmento)->where('aguardando', '0')
-            ->paginate(10);
-
-        }
-        else if($tipoSegmento) {
-
-            $users = Form::where('produtorCultural', $tipoSegmento)->where('aguardando', '0')
-            ->orWhere('produtorEsportivo', $tipoSegmento)->where('aguardando', '0')
-            ->orWhere('artista', $tipoSegmento)->where('aguardando', '0')
-            ->orWhere('atleta', $tipoSegmento)->where('aguardando', '0')->paginate(10);
-
-        }
-        else if($search) {
-
-            $users = Form::where('nomeArtistico', 'like', '%'.$search.'%')->where('aguardando', '0')
-            ->orWhere('cidade', 'like', '%'.$search.'%')->where('aguardando', '0')
-            ->orWhere('bairro', 'like', '%'.$search.'%')->where('aguardando', '0')->paginate(10);
-
-        } else {
-
-            $users = Form::where('aguardando', '0')->paginate(10);
-
-        }
+    public function viewHomePage(Request $request) {
 
         $exist = $this->exist();
         $segmentosCultural = Segmento::where('tipo', 1)->get();
         $segmentosEsportivo = Segmento::where('tipo', 2)->get();
+
+        $query = Form::query();
+
+        if ($request->has('segmento')) {
+
+            $segmentos = FormSegmento::where('tipo', $request->tipoSegmento)
+            ->Where('id_segmento', $request->segmento)->get();
+
+            $arrayCultural = array();
+
+            foreach($segmentos as $segmento) {
+                array_push($arrayCultural, $segmento->id_user);
+            }
+            
+            $query->where('aguardando', '0')->whereIn('id_user', $arrayCultural);
+
+        }
+
+        if ($request->has('tipoSegmento') && !$request->has('segmento')) {
+            $query->where('produtorCultural', $request->tipoSegmento)->where('aguardando', '0')
+            ->orWhere('produtorEsportivo', $request->tipoSegmento)->where('aguardando', '0')
+            ->orWhere('artista', $request->tipoSegmento)->where('aguardando', '0')
+            ->orWhere('atleta', $request->tipoSegmento)->where('aguardando', '0');
+        }
+
+        if ($request->has('search')) {
+            $query->where('nomeArtistico', 'like', '%'.$request->search.'%')->where('aguardando', '0')
+            ->orWhere('cidade', 'like', '%'.$request->search.'%')->where('aguardando', '0')
+            ->orWhere('bairro', 'like', '%'.$request->search.'%')->where('aguardando', '0');
+        }
+
+        $users = $query->paginate(10);
         
         return view('scaap.homePage', [
                 'users' => $users,
